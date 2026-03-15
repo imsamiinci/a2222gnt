@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deutsch Abenteuer A2</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:     #1a1a2e;
+  --deep:    #16213e;
+  --mid:     #0f3460;
+  --teal:    #0d7377;
+  --teal2:   #14a085;
+  --amber:   #f5a623;
+  --amber2:  #e8890a;
+  --rose:    #e84393;
+  --green:   #27ae60;
+  --green2:  #1e8449;
+  --red:     #e74c3c;
+  --red2:    #c0392b;
+  --sky:     #3498db;
+  --card:    #1e2d4a;
+  --card2:   #243354;
+  --border:  #2d4060;
+  --txt:     #e8f4f8;
+  --muted:   #7fb3c8;
+  --r:       14px;
+  --sh:      0 8px 32px rgba(0,0,0,.45);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Quicksand',sans-serif;
+  background:var(--ink);
+  color:var(--txt);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* ── SCREENS ── */
+.screen{display:none;min-height:100vh;flex-direction:column}
+.screen.active{display:flex}
+
+/* ══════════════════════════════════════
+   START SCREEN
+══════════════════════════════════════ */
+#scr-start{
+  align-items:center;justify-content:center;
+  background:
+    radial-gradient(ellipse 80% 60% at 70% 20%,#0d4a6050 0%,transparent 60%),
+    radial-gradient(ellipse 60% 50% at 20% 80%,#14a08520 0%,transparent 55%),
+    var(--ink);
+  padding:24px;text-align:center;gap:0;
+}
+.s-deco{font-size:clamp(4rem,14vw,7rem);line-height:1;animation:bob 4s ease-in-out infinite;margin-bottom:10px}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-14px) rotate(2deg)}}
+.s-logo{
+  font-family:'Baloo 2',cursive;font-weight:800;
+  font-size:clamp(2rem,7vw,3.6rem);
+  background:linear-gradient(135deg,var(--amber),var(--teal2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  line-height:1.1;margin-bottom:6px;
+}
+.s-badge{
+  display:inline-block;background:var(--teal);color:#fff;
+  font-size:.75rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  padding:4px 14px;border-radius:99px;margin-bottom:18px;
+}
+.s-desc{max-width:400px;color:var(--muted);font-size:.95rem;line-height:1.7;margin-bottom:28px;font-weight:500}
+.s-desc strong{color:var(--txt)}
+.inp-wrap{width:100%;max-width:320px;margin-bottom:18px;text-align:left}
+.inp-wrap label{display:block;font-size:.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.inp-wrap input{
+  width:100%;padding:13px 16px;
+  background:var(--card2);border:2px solid var(--border);border-radius:var(--r);
+  color:var(--txt);font-family:'Quicksand',sans-serif;font-size:1rem;font-weight:700;outline:none;
+  transition:border-color .2s;
+}
+.inp-wrap input:focus{border-color:var(--amber)}
+.btn-play{
+  background:linear-gradient(135deg,var(--amber),var(--amber2));
+  color:var(--ink);border:none;border-radius:var(--r);
+  padding:15px 44px;font-family:'Baloo 2',cursive;font-weight:700;font-size:1.25rem;
+  cursor:pointer;box-shadow:0 4px 20px #f5a62350;
+  transition:transform .15s,box-shadow .15s;
+}
+.btn-play:hover{transform:translateY(-3px);box-shadow:0 8px 28px #f5a62360}
+.btn-play:active{transform:scale(.97)}
+
+/* ══════════════════════════════════════
+   CHAPTER MAP
+══════════════════════════════════════ */
+#scr-map{
+  background:
+    radial-gradient(ellipse 100% 50% at 50% 0,#0f346020 0%,transparent 60%),
+    var(--ink);
+  padding:20px 16px 48px;
+}
+.map-header{text-align:center;padding:12px 0 24px}
+.map-header h2{font-family:'Baloo 2',cursive;font-size:1.9rem;font-weight:800;color:var(--amber)}
+.map-header p{color:var(--muted);font-size:.88rem;font-weight:600;margin-top:4px}
+.player-bar{
+  display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:22px;
+}
+.p-stat{
+  display:flex;align-items:center;gap:6px;
+  background:var(--card);border:1px solid var(--border);border-radius:99px;
+  padding:6px 14px;font-size:.88rem;font-weight:700;
+}
+.p-stat.xp{color:var(--amber)}.p-stat.lvl{color:var(--teal2)}.p-stat.name{color:var(--txt)}
+.ovr-prog{max-width:800px;margin:0 auto 22px;padding:0 4px}
+.ovr-prog .lbl{font-size:.76rem;font-weight:700;color:var(--muted);margin-bottom:6px;display:flex;justify-content:space-between}
+.pbar{background:var(--card2);border-radius:99px;height:10px;overflow:hidden;border:1px solid var(--border)}
+.pbar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--teal),var(--teal2));transition:width .8s cubic-bezier(.34,1.56,.64,1)}
+.ch-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(155px,1fr));
+  gap:12px;max-width:800px;margin:0 auto;
+}
+.ch-card{
+  background:var(--card);border:2px solid var(--border);border-radius:var(--r);
+  padding:16px 12px;text-align:center;cursor:pointer;position:relative;overflow:hidden;
+  transition:transform .15s,border-color .15s,box-shadow .15s;
+}
+.ch-card:hover:not(.locked){transform:translateY(-4px);box-shadow:var(--sh)}
+.ch-card.open{border-color:var(--teal)}
+.ch-card.done{border-color:var(--green)}
+.ch-card.locked{opacity:.4;cursor:not-allowed}
+.ch-card .ce{font-size:2rem;margin-bottom:6px;display:block}
+.ch-card .cn{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--muted)}
+.ch-card .ct{font-size:.84rem;font-weight:700;margin:3px 0;line-height:1.3;color:var(--txt)}
+.ch-card .cg{font-size:.72rem;color:var(--muted);font-weight:600}
+.ch-badge{position:absolute;top:8px;right:8px;font-size:.85rem}
+
+/* ══════════════════════════════════════
+   GAME SCREEN
+══════════════════════════════════════ */
+#scr-game{background:var(--deep)}
+.g-topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:11px 14px;background:var(--ink);border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:100;gap:8px;flex-wrap:wrap;
+}
+.g-left{display:flex;align-items:center;gap:10px}
+.btn-back{
+  background:var(--card2);border:1px solid var(--border);border-radius:10px;
+  color:var(--muted);padding:7px 12px;cursor:pointer;font-size:.9rem;
+  font-family:'Quicksand',sans-serif;font-weight:700;transition:color .15s,border-color .15s;
+}
+.btn-back:hover{color:var(--txt);border-color:var(--muted)}
+.g-ch-lbl{font-size:.84rem;font-weight:700;color:var(--amber);font-family:'Baloo 2',cursive}
+.g-right{display:flex;align-items:center;gap:12px}
+.g-xp{display:flex;align-items:center;gap:4px;font-size:.9rem;font-weight:700;color:var(--amber)}
+.g-hearts{display:flex;gap:3px;font-size:1.05rem}
+.step-bar-wrap{padding:7px 14px 0;background:var(--ink)}
+.sbar{background:var(--card2);border-radius:99px;height:6px;overflow:hidden}
+.sbar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--amber),var(--rose));transition:width .5s ease}
+.s-lbl{font-size:.7rem;color:var(--muted);text-align:right;padding:3px 0 7px;font-weight:700}
+.scene-wrap{flex:1;padding:18px 14px 90px;max-width:660px;margin:0 auto;width:100%}
+
+/* ── SCENE ILLUSTRATION ── */
+.s-illus{
+  background:linear-gradient(135deg,var(--card2),var(--card));
+  border:1px solid var(--border);border-radius:var(--r);
+  padding:24px;text-align:center;margin-bottom:16px;
+  animation:fadeUp .35s ease;
+}
+.s-illus .bi{font-size:3.8rem;display:block;margin-bottom:8px;animation:bob 3s ease-in-out infinite}
+.s-illus h3{font-family:'Baloo 2',cursive;font-size:1.2rem;color:var(--amber);margin-bottom:4px}
+.s-illus p{font-size:.87rem;color:var(--muted);line-height:1.6}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── DIALOGUE ── */
+.dlg{display:flex;flex-direction:column;gap:14px;animation:fadeUp .3s ease}
+.npc-row{display:flex;align-items:flex-end;gap:10px}
+.npc-av{font-size:2.5rem;min-width:48px;text-align:center;animation:pop .4s cubic-bezier(.34,1.56,.64,1)}
+@keyframes pop{from{transform:scale(.5);opacity:0}to{transform:scale(1);opacity:1}}
+.bubble{
+  background:var(--card2);border:1px solid var(--border);
+  border-radius:16px 16px 16px 4px;padding:13px 16px;max-width:86%;
+  line-height:1.65;font-size:.95rem;font-weight:600;animation:fadeUp .3s ease;
+}
+.bubble.pl{
+  background:linear-gradient(135deg,#0d4a60,#0f3460);
+  border-color:#0d737740;border-radius:16px 16px 4px 16px;margin-left:auto;
+}
+.npc-name{font-size:.7rem;font-weight:800;color:var(--teal2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.vhl{
+  background:rgba(245,166,35,.18);border-bottom:2px solid var(--amber);
+  border-radius:3px;cursor:pointer;padding:0 2px;transition:background .15s;
+}
+.vhl:hover{background:rgba(245,166,35,.32)}
+.vtip{
+  display:none;background:var(--card);border:1px solid var(--amber);
+  border-radius:10px;padding:8px 12px;font-size:.8rem;color:var(--muted);
+  margin-top:5px;animation:fadeUp .2s ease;
+}
+.vtip.show{display:block}
+
+/* ── NARRATION ── */
+.narr{text-align:center;font-size:.88rem;color:var(--muted);font-style:italic;padding:8px 0;font-weight:600}
+
+/* ── GRAMMAR CARD ── */
+.gram-card{
+  background:linear-gradient(135deg,#0d2540,#0a1e35);
+  border:1px solid #1a5070;border-radius:var(--r);padding:18px;
+  animation:fadeUp .3s ease;
+}
+.gram-card h3{font-family:'Baloo 2',cursive;font-size:1.1rem;color:var(--teal2);margin-bottom:12px}
+.gram-tbl{width:100%;border-collapse:collapse;font-size:.84rem}
+.gram-tbl th{background:var(--card2);color:var(--muted);padding:7px 10px;text-align:left;font-size:.72rem;text-transform:uppercase;letter-spacing:.5px}
+.gram-tbl td{padding:7px 10px;border-top:1px solid var(--border);font-weight:600}
+.gram-tbl .hi{color:var(--amber)}
+.gram-tip{margin-top:12px;background:rgba(13,115,119,.2);border-left:3px solid var(--teal);border-radius:0 8px 8px 0;padding:9px 13px;font-size:.83rem;color:var(--muted);font-weight:600}
+.gram-tip strong{color:var(--txt)}
+
+/* ── VOCAB GRID ── */
+.sec-title{font-family:'Baloo 2',cursive;font-size:1rem;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:7px}
+.v-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.v-item{
+  background:var(--card2);border:1px solid var(--border);border-radius:11px;
+  padding:11px 13px;cursor:pointer;transition:border-color .15s,transform .15s;
+}
+.v-item:hover{border-color:var(--amber);transform:translateY(-1px)}
+.v-item.flip{border-color:var(--teal2);background:#0a2530}
+.v-item .vw{font-size:.95rem;font-weight:700;color:var(--txt)}
+.v-item .va{font-size:.68rem;font-weight:800;color:var(--amber);margin-bottom:2px}
+.v-item .vh{font-size:.76rem;color:var(--muted);margin-top:3px;display:none}
+.v-item.flip .vh{display:block}
+
+/* ── EXERCISE ── */
+.ex-card{background:var(--card);border:2px solid var(--border);border-radius:var(--r);padding:18px;animation:fadeUp .3s ease}
+.ex-type{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--teal2);margin-bottom:7px}
+.ex-q{font-size:1rem;font-weight:700;color:var(--txt);margin-bottom:15px;line-height:1.55}
+
+/* MC */
+.mc-opts{display:flex;flex-direction:column;gap:9px}
+.mc-btn{
+  background:var(--card2);border:2px solid var(--border);border-radius:11px;
+  padding:12px 15px;cursor:pointer;font-size:.93rem;font-weight:700;text-align:left;
+  color:var(--txt);font-family:'Quicksand',sans-serif;transition:border-color .15s,transform .1s;
+}
+.mc-btn:hover:not(:disabled){border-color:var(--sky);transform:translateX(3px)}
+.mc-btn.ok{border-color:var(--green)!important;background:rgba(39,174,96,.18)!important;color:#a9f0c8!important}
+.mc-btn.no{border-color:var(--red)!important;background:rgba(231,76,60,.18)!important;color:#ffc0bb!important}
+.mc-btn:disabled{cursor:not-allowed}
+
+/* FILL */
+.fill-row{display:flex;gap:9px}
+.fill-in{
+  flex:1;padding:11px 15px;background:var(--card2);border:2px solid var(--border);
+  border-radius:11px;color:var(--txt);font-family:'Quicksand',sans-serif;
+  font-size:.95rem;font-weight:700;outline:none;transition:border-color .2s;
+}
+.fill-in:focus{border-color:var(--amber)}
+.fill-in.ok{border-color:var(--green);background:rgba(39,174,96,.15)}
+.fill-in.no{border-color:var(--red);background:rgba(231,76,60,.15)}
+.btn-check{
+  background:var(--teal);color:#fff;border:none;border-radius:11px;
+  padding:11px 18px;font-family:'Baloo 2',cursive;font-size:.95rem;
+  cursor:pointer;font-weight:700;transition:background .15s;
+}
+.btn-check:hover{background:var(--teal2)}
+
+/* FEEDBACK */
+.fb{margin-top:13px;border-radius:11px;padding:11px 15px;font-weight:700;font-size:.89rem;display:none;align-items:flex-start;gap:9px}
+.fb.show{display:flex;animation:pop .3s ease}
+.fb.ok{background:rgba(39,174,96,.15);color:#a9f0c8;border:1px solid var(--green)}
+.fb.no{background:rgba(231,76,60,.15);color:#ffc0bb;border:1px solid var(--red)}
+.fb-icon{font-size:1.2rem}
+
+/* CHOICE */
+.ch-opts{display:flex;flex-direction:column;gap:9px;margin-top:6px}
+.ch-btn{
+  background:var(--card2);border:2px solid var(--teal);border-radius:11px;
+  padding:12px 15px;cursor:pointer;font-size:.93rem;font-weight:700;
+  color:var(--txt);font-family:'Quicksand',sans-serif;text-align:left;
+  transition:background .15s,transform .1s;
+}
+.ch-btn:hover{background:#0d4a6050;transform:translateX(4px)}
+.ch-btn::before{content:'▸ ';color:var(--teal2)}
+
+/* CONTINUE */
+.btn-cont{
+  display:block;width:100%;margin-top:16px;
+  background:linear-gradient(135deg,var(--amber),var(--amber2));
+  color:var(--ink);border:none;border-radius:var(--r);
+  padding:14px;font-family:'Baloo 2',cursive;font-weight:700;font-size:1.15rem;
+  cursor:pointer;box-shadow:0 4px 16px #f5a62340;transition:transform .15s,box-shadow .15s;
+}
+.btn-cont:hover{transform:translateY(-2px);box-shadow:0 6px 22px #f5a62355}
+.btn-cont:active{transform:scale(.98)}
+
+/* SORTING / MATCHING */
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.m-btn{
+  background:var(--card2);border:2px solid var(--border);border-radius:10px;
+  padding:10px;cursor:pointer;font-size:.85rem;font-weight:700;
+  color:var(--txt);font-family:'Quicksand',sans-serif;text-align:center;
+  transition:border-color .15s,background .15s;
+}
+.m-btn.sel{border-color:var(--amber);background:rgba(245,166,35,.15)}
+.m-btn.mat{border-color:var(--green);background:rgba(39,174,96,.15);color:#a9f0c8;cursor:default}
+.m-btn.err{border-color:var(--red);animation:shake .4s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+/* ══════════════════════════════════════
+   COMPLETE SCREEN
+══════════════════════════════════════ */
+#scr-done{
+  align-items:center;justify-content:center;
+  background:radial-gradient(ellipse at 50% 40%,#0d4a3020,var(--ink));
+  padding:24px;text-align:center;
+}
+.done-em{font-size:5rem;animation:pop .6s cubic-bezier(.34,1.56,.64,1);display:block;margin-bottom:14px}
+.done-title{font-family:'Baloo 2',cursive;font-size:2rem;font-weight:800;color:var(--amber);margin-bottom:6px}
+.done-sub{color:var(--muted);font-size:.95rem;margin-bottom:24px;font-weight:600}
+.done-stars{font-size:2rem;margin-bottom:20px;letter-spacing:4px}
+.xp-box{
+  background:var(--card2);border:2px solid var(--amber);border-radius:var(--r);
+  padding:14px 30px;margin-bottom:22px;display:inline-block;
+}
+.xp-box p{font-size:.75rem;color:var(--muted);font-weight:700;text-transform:uppercase}
+.xp-box .xn{font-family:'Baloo 2',cursive;font-size:2.6rem;color:var(--amber);line-height:1}
+.btn-nxt{
+  background:linear-gradient(135deg,var(--green),var(--green2));
+  color:#fff;border:none;border-radius:var(--r);
+  padding:14px 36px;font-family:'Baloo 2',cursive;font-weight:700;font-size:1.15rem;
+  cursor:pointer;display:block;width:100%;max-width:300px;margin-bottom:11px;
+  transition:transform .15s;
+}
+.btn-nxt:hover{transform:translateY(-2px)}
+.btn-map{
+  background:var(--card2);color:var(--muted);border:1px solid var(--border);border-radius:var(--r);
+  padding:11px 36px;font-family:'Baloo 2',cursive;font-weight:700;font-size:.95rem;
+  cursor:pointer;display:block;width:100%;max-width:300px;transition:color .15s;
+}
+.btn-map:hover{color:var(--txt)}
+
+/* ── TOAST ── */
+.toast{
+  position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(80px);
+  background:var(--card);border:1px solid var(--border);border-radius:50px;
+  padding:11px 22px;font-size:.88rem;font-weight:700;z-index:9999;
+  transition:transform .4s cubic-bezier(.34,1.56,.64,1);pointer-events:none;white-space:nowrap;
+}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast.xp{border-color:var(--amber);color:var(--amber)}
+
+/* ── XP POP ── */
+.xp-pop{
+  position:fixed;font-family:'Baloo 2',cursive;font-size:1.3rem;font-weight:800;
+  color:var(--amber);pointer-events:none;z-index:9999;
+  animation:xpf 1.3s forwards;
+}
+@keyframes xpf{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-80px) scale(1.4)}}
+
+/* ── CONFETTI ── */
+.kf-wrap{position:fixed;top:0;left:0;right:0;height:0;pointer-events:none;z-index:9998}
+.kf{position:absolute;width:9px;height:13px;border-radius:3px;opacity:0;animation:kfall 2.2s ease-in forwards}
+@keyframes kfall{0%{opacity:1;transform:translateY(-20px) rotate(0)}100%{opacity:0;transform:translateY(100vh) rotate(740deg)}}
+
+/* ── RESPONSIVE ── */
+@media(max-width:460px){
+  .v-grid{grid-template-columns:1fr}
+  .ch-grid{grid-template-columns:repeat(3,1fr);gap:7px}
+  .ch-card{padding:11px 7px}
+  .ch-card .ce{font-size:1.5rem}
+  .ch-card .ct{font-size:.75rem}
+  .ch-card .cg{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════ START ═══════ -->
+<div id="scr-start" class="screen active">
+  <div class="s-deco">🧳</div>
+  <div class="s-logo">Deutsch Abenteuer</div>
+  <div class="s-badge">A2 · Sprachlernspiel</div>
+  <div class="s-desc">
+    Erlebe <strong>24 spannende Kapitel</strong> des deutschen Alltags –
+    von der Wohnungssuche bis zum Jobinterview.
+    Lerne Grammatik durch echte Situationen!
+  </div>
+  <div class="inp-wrap">
+    <label>Dein Name</label>
+    <input id="pname" type="text" placeholder="Wie heißt du?" maxlength="20"/>
+  </div>
+  <button class="btn-play" onclick="startGame()">Abenteuer beginnen ▶</button>
+</div>
+
+<!-- ═══════ MAP ═══════ -->
+<div id="scr-map" class="screen">
+  <div class="map-header">
+    <h2>🗺️ Abenteuer-Karte</h2>
+    <p id="map-sub">Wähle dein nächstes Kapitel!</p>
+  </div>
+  <div class="player-bar">
+    <div class="p-stat name">👤 <span id="disp-name">Spieler</span></div>
+    <div class="p-stat xp">⭐ <span id="disp-xp">0</span> XP</div>
+    <div class="p-stat lvl">🎓 <span id="disp-lvl">A2.1</span></div>
+  </div>
+  <div class="ovr-prog">
+    <div class="lbl"><span>Gesamtfortschritt</span><span id="disp-pct">0%</span></div>
+    <div class="pbar"><div class="pbar-fill" id="ovr-bar" style="width:0%"></div></div>
+  </div>
+  <div class="ch-grid" id="ch-grid"></div>
+</div>
+
+<!-- ═══════ GAME ═══════ -->
+<div id="scr-game" class="screen">
+  <div class="g-topbar">
+    <div class="g-left">
+      <button class="btn-back" onclick="goMap()">← Karte</button>
+      <span class="g-ch-lbl" id="g-chlbl">Kapitel 1</span>
+    </div>
+    <div class="g-right">
+      <div class="g-xp">⭐ <span id="g-xp">0</span></div>
+      <div class="g-hearts" id="g-hearts"></div>
+    </div>
+  </div>
+  <div class="step-bar-wrap">
+    <div class="sbar"><div class="sbar-fill" id="sbar" style="width:0%"></div></div>
+    <div class="s-lbl" id="slbl">Schritt 1 / 1</div>
+  </div>
+  <div class="scene-wrap" id="scene"></div>
+</div>
+
+<!-- ═══════ COMPLETE ═══════ -->
+<div id="scr-done" class="screen">
+  <span class="done-em">🏆</span>
+  <div class="done-title">Kapitel abgeschlossen!</div>
+  <div class="done-sub" id="done-sub">Fantastisch!</div>
+  <div class="done-stars" id="done-stars">⭐⭐⭐</div>
+  <div class="xp-box">
+    <p>Verdiente XP</p>
+    <div class="xn" id="done-xp">+120</div>
+  </div>
+  <button class="btn-nxt" id="btn-nxt" onclick="nextChapter()">Weiter →</button>
+  <button class="btn-map" onclick="goMap()">Zurück zur Karte</button>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="kf-wrap" id="kf"></div>
+
+<script>
+// ════════════════════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════════════════════
+const S={
+  name:'Spieler',xp:0,chIdx:0,step:0,hearts:3,chXP:0,
+  done: JSON.parse(localStorage.getItem('da2_done')||'[]'),
+  xpSaved: +( localStorage.getItem('da2_xp')||0),
+};
+S.xp=S.xpSaved;
+function save(){localStorage.setItem('da2_done',JSON.stringify(S.done));localStorage.setItem('da2_xp',S.xp)}
+
+// ════════════════════════════════════════════════════════════
+// CHAPTERS DATA  (24 chapters, all German)
+// ════════════════════════════════════════════════════════════
+const CH=[
+// ─── 1: Erinnerungen ───
+{id:1,title:'Alte Erinnerungen',emoji:'📸',topic:'Perfekt & Präteritum',xp:120,steps:[
+  {type:'scene',il:{emoji:'🏙️',title:'Berlin – Wiedersehenstreffen',desc:'Du triffst eine alte Freundin in einem Café in Berlin.'}},
+  {type:'dlg',npc:{name:'Freundin Lisa',em:'👩‍🦰'},
+   text:'Oh! Wir haben uns so lange nicht <span class="vhl" data-t="gesehen = Partizip II von sehen (unregelmäßig)">gesehen</span>! Wie lange <span class="vhl" data-t="ist es her = es liegt ... in der Vergangenheit">ist das her</span>?'},
+  {type:'gram',title:'Perfekt – Rückblick A2',
+   tbl:{h:['Typ','Beispiel','Hilfsverb'],
+        r:[['Bewegung/Zustand','Ich bin gereist / gegangen','sein'],
+           ['meiste Verben','Ich habe gekauft / gegessen','haben'],
+           ['Unregelmäßig','sehen→gesehen, schreiben→geschrieben','haben'],
+           ['Trennbar','Ich habe eingekauft / angerufen','haben']]},
+   tip:'<strong>Tipp:</strong> „sein" bei Bewegung: fahren, gehen, kommen, fliegen, reisen.'},
+  {type:'mc',q:'„Ich _____ letztes Jahr nach Hamburg gereist." (Perfekt)',
+   opts:['habe','bin','hatte','war'],cor:1,
+   okFB:'Richtig! „reisen" = Bewegung → Hilfsverb „sein": ich bin gereist.',
+   noFB:'Reisen = Bewegung → Hilfsverb SEIN: „Ich bin gereist."'},
+  {type:'gram',title:'Präteritum: war & hatte',
+   tbl:{h:['Pronomen','war (sein)','hatte (haben)'],
+        r:[['ich','war','hatte'],['du','warst','hattest'],['er/sie/es','war','hatte'],
+           ['wir','waren','hatten'],['ihr','wart','hattet'],['sie/Sie','waren','hatten']]},
+   tip:'<strong>war/hatte</strong> benutzt man oft in Erzählungen und Texten, auch mündlich für sein/haben.'},
+  {type:'fill',q:'Ergänze: „Als ich Kind _____, wohnte ich in Ankara."',ans:'war',
+   hint:'sein → Vergangenheit (Präteritum, ich): w__',
+   okFB:'Perfekt! „Als ich Kind war..." – Präteritum von sein.',
+   noFB:'Präteritum von sein → ich war'},
+  {type:'gram',title:'Konjunktion „als" – Zeitpunkt in der Vergangenheit',
+   tbl:{h:['Konjunktion','Bedeutung','Beispiel'],
+        r:[['als','einmaliger Zeitpunkt (Vergangenheit)','Als ich 10 war, hatte ich einen Hund.'],
+           ['wenn','Wiederholung/Gegenwart/Zukunft','Wenn ich müde bin, schlafe ich früh.'],
+           ['wann','Fragesatz','Wann bist du gekommen?']]},
+   tip:'<strong>als</strong> steht immer mit Vergangenheit und ist ein einmaliges Ereignis. Das Verb steht am Satzende!'},
+  {type:'choice',pr:'Lisa fragt: „Was hast du gemacht, als du jung warst?" Antworte!',
+   chs:[
+     {t:'Als ich jung war, habe ich viel Sport gemacht.',ok:true,fb:'Toll! Korrekte Satzstruktur mit „als".'},
+     {t:'Wenn ich jung bin, mache ich Sport.',ok:false,fb:'„wenn" benutzt man für Gegenwart/Wiederholung. Für Vergangenheit: „als".'},
+     {t:'Als jung, Sport ich mache.',ok:false,fb:'Wortstellung falsch! Verb steht am Ende des Nebensatzes.'},
+   ]},
+]},
+
+// ─── 2: Freundschaften ───
+{id:2,title:'Alte Freunde',emoji:'🤝',topic:'Präteritum & als',xp:120,steps:[
+  {type:'scene',il:{emoji:'☕',title:'Café Metropol',desc:'Du und Lisa erzählen von früher.'}},
+  {type:'dlg',npc:{name:'Lisa',em:'👩‍🦰'},
+   text:'<span class="vhl" data-t="Erinnerst du dich? = Kannst du dich erinnern?">Erinnerst du dich</span> noch an unsere Schulzeit? Das <span class="vhl" data-t="war = Präteritum von sein">war</span> so lustig!'},
+  {type:'vocab',title:'Freundschaft & Erinnerungen – Klicke zum Aufdecken!',
+   items:[
+     {w:'sich erinnern an',a:'Verb',h:'eine Erinnerung haben: Ich erinnere mich an den Urlaub.'},
+     {w:'vermissen',a:'Verb',h:'jemanden/etwas nicht mehr haben und das traurig finden'},
+     {w:'gemeinsam',a:'Adjektiv',h:'zusammen, mit einer anderen Person'},
+     {w:'die Kindheit',a:'feminin',h:'die Zeit, als man ein Kind war (0-12 Jahre)'},
+     {w:'damals',a:'Adverb',h:'in der Vergangenheit, zu dieser Zeit'},
+     {w:'seitdem',a:'Adverb',h:'ab diesem Zeitpunkt bis heute'},
+   ]},
+  {type:'mc',q:'„_____ wir Kinder waren, spielten wir jeden Tag draußen." (Konjunktion)',
+   opts:['Wenn','Wann','Als','Ob'],cor:2,
+   okFB:'Richtig! „als" für einen vergangenen Zeitabschnitt.',
+   noFB:'Einmaliger Zeitpunkt in der Vergangenheit → „als"'},
+  {type:'fill',q:'Ergänze: „Ich _____ damals sehr schüchtern." (Präteritum, sein)',
+   ans:'war',hint:'Präteritum von sein: ich w__',
+   okFB:'Klasse! „ich war" = Präteritum von sein.',
+   noFB:'sein → Präteritum → ich war'},
+  {type:'mc',q:'Lisa sagt: „Ich hatte früher so viele Freunde." Was bedeutet das?',
+   opts:['Sie hat jetzt viele Freunde.','Sie hatte früher viele Freunde (Vergangenheit).','Sie wird Freunde haben.','Sie mag keine Freunde.'],
+   cor:1,
+   okFB:'Genau! „hatte" = Präteritum von haben → Vergangenheit.',
+   noFB:'hatte = Präteritum von haben → früher, in der Vergangenheit.'},
+]},
+
+// ─── 3: Beruflicher Hintergrund ───
+{id:3,title:'Berufliche Vergangenheit',emoji:'💼',topic:'Perfekt & als üben',xp:120,steps:[
+  {type:'scene',il:{emoji:'🏢',title:'Vorstellungsgespräch',desc:'Du bewirbst dich auf eine neue Stelle und sprichst über deine Erfahrungen.'}},
+  {type:'dlg',npc:{name:'HR-Managerin Frau Becker',em:'👩‍💼'},
+   text:'Erzählen Sie mir von Ihrem <span class="vhl" data-t="der Werdegang = die berufliche Geschichte, was man gemacht hat">beruflichen Werdegang</span>. Was haben Sie vorher <span class="vhl" data-t="gemacht = Partizip II von machen; „was haben Sie gemacht?" fragt nach Aktivitäten">gemacht</span>?'},
+  {type:'gram',title:'Perfekt – Partizip II Formen',
+   tbl:{h:['Infinitiv','Partizip II','Hilfsverb'],
+        r:[['arbeiten','gearbeitet','haben'],['studieren','studiert (kein ge-)','haben'],
+           ['schreiben','geschrieben','haben'],['fahren','ist gefahren','sein'],
+           ['bekommen','bekommen (kein ge-)','haben'],['anfangen','angefangen','haben']]},
+   tip:'<strong>Kein ge-:</strong> Verben auf -ieren und Verben mit Vorsilben be-, ver-, er-, etc.'},
+  {type:'fill',q:'„Ich habe drei Jahre in Hamburg _____ ." (arbeiten → Partizip II)',
+   ans:'gearbeitet',hint:'arbeiten (regelmäßig) → ge + arbeit + et',
+   okFB:'Perfekt! „gearbeitet" – regelmäßiges Verb.',
+   noFB:'arbeiten → gearbeitet (ge + Stamm + et)'},
+  {type:'mc',q:'„Als ich _____ habe, habe ich viel gelernt." (studieren)',
+   opts:['gestudiert','studiert','studieren','studierte'],cor:1,
+   okFB:'Richtig! Verben auf -ieren bekommen kein „ge-": studiert.',
+   noFB:'Verben auf -ieren → kein ge-! studieren → studiert'},
+  {type:'choice',pr:'Frau Becker fragt: „Warum möchten Sie bei uns arbeiten?" Was antwortest du?',
+   chs:[
+     {t:'Weil ich Ihre Firma sehr interessant finde und meine Fähigkeiten einbringen möchte.',ok:true,fb:'Ausgezeichnet! Professionelle Antwort mit „weil".'},
+     {t:'Ich brauche Geld.',ok:false,fb:'Das ist zwar ehrlich, aber im Vorstellungsgespräch nicht ideal. Nenne lieber Motivation!'},
+     {t:'Keine Ahnung.',ok:false,fb:'Das klingt nicht professionell. Erkläre deine Motivation!'},
+   ]},
+]},
+
+// ─── 4: Wohnungssuche ───
+{id:4,title:'Wohnung gesucht!',emoji:'🏠',topic:'Wechselpräpositionen',xp:130,steps:[
+  {type:'scene',il:{emoji:'🔑',title:'Wohnungsmarkt Berlin',desc:'Du suchst eine neue Wohnung und besichtigst verschiedene Appartements.'}},
+  {type:'dlg',npc:{name:'Makler Herr Vogel',em:'👨‍💼'},
+   text:'Diese Wohnung liegt <span class="vhl" data-t="im = in dem; „im Zentrum" = in der Stadtmitte">im Zentrum</span>. Der Supermarkt ist <span class="vhl" data-t="neben = seitlich von etwas (Dativ bei Lage)">neben</span> dem Haus.'},
+  {type:'gram',title:'Wechselpräpositionen: Dativ vs. Akkusativ',
+   tbl:{h:['Präposition','Wo? (Dativ)','Wohin? (Akkusativ)'],
+        r:[['in','Das Buch liegt in der Tasche.','Ich lege das Buch in die Tasche.'],
+           ['auf','Die Tasse steht auf dem Tisch.','Ich stelle die Tasse auf den Tisch.'],
+           ['an','Das Bild hängt an der Wand.','Ich hänge das Bild an die Wand.'],
+           ['unter','Die Katze liegt unter dem Stuhl.','Die Katze geht unter den Stuhl.'],
+           ['vor','Das Auto steht vor dem Haus.','Ich stelle das Auto vor das Haus.'],
+           ['hinter','Der Garten liegt hinter dem Haus.','Ich gehe hinter das Haus.'],
+           ['neben','Die Bank ist neben dem Supermarkt.','Ich setze mich neben den Mann.'],
+           ['zwischen','Der Park liegt zwischen dem Bahnhof und dem Museum.','Ich stelle mich zwischen die Leute.']]},
+   tip:'<strong>Merke:</strong> Lage (wo?) → Dativ | Richtung (wohin?) → Akkusativ'},
+  {type:'mc',q:'„Das Sofa steht _____ Fenster." (Dativ – Lage, neben)',
+   opts:['neben dem','neben das','neben der','neben den'],cor:0,
+   okFB:'Richtig! Lage (wo?) → Dativ: neben dem Fenster (das → dem).',
+   noFB:'Lage = Dativ: neben dem Fenster (das Fenster → dem Fenster)'},
+  {type:'fill',q:'„Ich hänge das Bild _____ Wand." (an, wohin? → Akkusativ, feminin)',
+   ans:'an die',hint:'wohin? Akkusativ: die Wand → an ___ Wand',
+   okFB:'Super! Akkusativ feminin: die Wand bleibt „die": an die Wand.',
+   noFB:'Richtung (wohin?) → Akkusativ: an die Wand'},
+  {type:'mc',q:'„Der Kühlschrank steht _____ Küche." (in, Dativ, feminin)',
+   opts:['in der','in die','in dem','in den'],cor:0,
+   okFB:'Richtig! Lage: in der Küche (die Küche → der Küche, Dativ).',
+   noFB:'Lage (wo?) = Dativ: die Küche → der Küche → in der Küche'},
+]},
+
+// ─── 5: Möbel & Einrichten ───
+{id:5,title:'Das neue Zuhause',emoji:'🛋️',topic:'Verben mit Präpositionen',xp:130,steps:[
+  {type:'scene',il:{emoji:'🪑',title:'Neue Wohnung einrichten',desc:'Deine neue Wohnung ist leer. Zeit zum Einrichten!'}},
+  {type:'dlg',npc:{name:'Freundin Sara',em:'👩'},
+   text:'Wohin stellst du denn den Schrank? <span class="vhl" data-t="stellen = etwas aufrecht hinstellen (mit Akkusativ)">Stellst</span> du ihn <span class="vhl" data-t="neben = seitlich; Wohin? → Akkusativ">neben die</span> Tür?'},
+  {type:'vocab',title:'Verben beim Einrichten',
+   items:[
+     {w:'stellen',a:'Verb',h:'aufrecht hinstellen (Schrank, Flasche): Ich stelle den Schrank hin.'},
+     {w:'legen',a:'Verb',h:'flach hinlegen (Buch, Zeitung): Ich lege das Buch auf den Tisch.'},
+     {w:'hängen',a:'Verb',h:'an die Wand hängen: Ich hänge das Bild an die Wand.'},
+     {w:'setzen',a:'Verb',h:'jemanden/sich setzen: Ich setze mich auf den Stuhl.'},
+     {w:'stehen',a:'Verb',h:'Zustand aufrecht (wo?): Der Schrank steht neben der Tür.'},
+     {w:'liegen',a:'Verb',h:'Zustand flach (wo?): Das Buch liegt auf dem Tisch.'},
+   ]},
+  {type:'gram',title:'Verben mit Präpositionen (feste Verbindungen)',
+   tbl:{h:['Verb','Präposition','Beispiel'],
+        r:[['warten auf','+ Akkusativ','Ich warte auf den Bus.'],
+           ['denken an','+ Akkusativ','Ich denke an dich.'],
+           ['sprechen über','+ Akkusativ','Wir sprechen über das Problem.'],
+           ['sich freuen auf','+ Akkusativ','Ich freue mich auf das Wochenende.'],
+           ['sich freuen über','+ Akkusativ','Ich freue mich über das Geschenk.'],
+           ['helfen bei','+ Dativ','Ich helfe dir bei der Aufgabe.']]},
+   tip:'<strong>Diese Verbindungen lernt man auswendig</strong> – die Präposition gehört fest zum Verb!'},
+  {type:'mc',q:'„Ich warte _____ den nächsten Bus." (warten auf)',
+   opts:['für','auf','an','bei'],cor:1,
+   okFB:'Richtig! warten + auf + Akkusativ',
+   noFB:'warten + AUF + Akkusativ: ich warte auf den Bus.'},
+  {type:'fill',q:'„Wir sprechen _____ die neue Wohnung." (sprechen über)',
+   ans:'über',hint:'sprechen + _____ (feste Verbindung)',
+   okFB:'Perfekt! sprechen über: Wir sprechen über die Wohnung.',
+   noFB:'sprechen + ÜBER + Akkusativ'},
+]},
+
+// ─── 6: Büro & Technologie ───
+{id:6,title:'Technik im Büro',emoji:'💻',topic:'Wechselpräpositionen üben',xp:130,steps:[
+  {type:'scene',il:{emoji:'🖥️',title:'Büroalltag',desc:'Dein erster Tag im neuen Büro in München.'}},
+  {type:'dlg',npc:{name:'Kollegin Mia',em:'👩‍💻'},
+   text:'Dein Schreibtisch ist <span class="vhl" data-t="am = an dem; am Fenster = neben dem Fenster">am Fenster</span>. Leg die Dokumente <span class="vhl" data-t="in die Ablage = wohin? Akkusativ (Richtung)">in die Ablage</span>, bitte.'},
+  {type:'vocab',title:'Technik & Büro',
+   items:[
+     {w:'die Datei',a:'feminin',h:'digitales Dokument auf dem Computer'},
+     {w:'speichern',a:'Verb',h:'Daten auf dem Computer sichern'},
+     {w:'drucken',a:'Verb',h:'ein Dokument auf Papier ausgeben'},
+     {w:'der Drucker',a:'maskulin',h:'Gerät, das Dokumente auf Papier druckt'},
+     {w:'die Verbindung',a:'feminin',h:'Kontakt zwischen zwei Geräten (z.B. WLAN)'},
+     {w:'hochladen',a:'Verb (trennbar)',h:'eine Datei ins Internet stellen'},
+   ]},
+  {type:'mc',q:'„Ich lege die Akte _____ Schreibtisch." (auf, wohin → Akkusativ)',
+   opts:['auf dem','auf den','auf der','auf die'],cor:1,
+   okFB:'Richtig! wohin? → Akkusativ: der Schreibtisch → den Schreibtisch → auf den Schreibtisch.',
+   noFB:'Richtung (wohin?) → Akkusativ: der → den. auf den Schreibtisch.'},
+  {type:'fill',q:'„Das Dokument liegt _____ Drucker." (unter, Dativ, maskulin)',
+   ans:'unter dem',hint:'Lage (wo?) → Dativ: der Drucker → ___ Drucker',
+   okFB:'Super! Dativ maskulin: der → dem → unter dem Drucker.',
+   noFB:'Lage (wo?) → Dativ: der Drucker → dem Drucker → unter dem Drucker'},
+]},
+
+// ─── 7: Beim Arzt ───
+{id:7,title:'Beim Arzt',emoji:'🩺',topic:'Konjunktiv II (könnte/würde)',xp:140,steps:[
+  {type:'scene',il:{emoji:'🏥',title:'Arztpraxis Dr. Hartmann',desc:'Du hast Rückenschmerzen und gehst zum Arzt.'}},
+  {type:'dlg',npc:{name:'Dr. Hartmann',em:'👨‍⚕️'},
+   text:'Guten Tag! Was <span class="vhl" data-t="fehlt Ihnen = Was haben Sie? Was ist das Problem?">fehlt Ihnen</span>? Seit wann haben Sie die <span class="vhl" data-t="die Beschwerden (Plural) = Schmerzen, Probleme mit der Gesundheit">Beschwerden</span>?'},
+  {type:'gram',title:'Konjunktiv II – höfliche Bitten & Wünsche',
+   tbl:{h:['Form','Verwendung','Beispiel'],
+        r:[['könnte','höfliche Bitte (können)','Könnten Sie das bitte wiederholen?'],
+           ['würde','höfliche Handlung (würden)','Ich würde gern einen Termin machen.'],
+           ['dürfte','höfliche Erlaubnis (dürfen)','Dürfte ich kurz fragen?'],
+           ['sollte','Ratschlag (sollen)','Sie sollten mehr Wasser trinken.'],
+           ['müsste','Notwendigkeit (müssen)','Ich müsste eigentlich früh aufstehen.']]},
+   tip:'<strong>Konjunktiv II</strong> macht Sätze höflicher und weicher. Im Alltag sehr wichtig!'},
+  {type:'mc',q:'Du willst höflich nach dem Weg fragen. Welche Variante ist am höflichsten?',
+   opts:['Wo ist die Apotheke?','Sag mir, wo die Apotheke ist!','Könnten Sie mir sagen, wo die Apotheke ist?','Apotheke – wo?'],
+   cor:2,
+   okFB:'Richtig! „Könnten Sie..." ist Konjunktiv II – sehr höflich.',
+   noFB:'Höflichste Form: Konjunktiv II „Könnten Sie mir sagen, wo...?"'},
+  {type:'fill',q:'Ergänze höflich: „_____ ich bitte morgen einen Termin bekommen?" (Konjunktiv II, können)',
+   ans:'Könnte',hint:'können → Konjunktiv II → K___te',
+   okFB:'Perfekt! „Könnte ich bitte...?" – sehr höfliche Anfrage.',
+   noFB:'können → Konjunktiv II → könnte: „Könnte ich...?"'},
+  {type:'choice',pr:'Der Arzt fragt: „Könnten Sie mir die Stelle zeigen, wo es wehtut?" Was machst du?',
+   chs:[
+     {t:'Ich zeige ihm die schmerzende Stelle und erkläre: „Hier tut es weh."',ok:true,fb:'Sehr gut! Klare Kommunikation beim Arzt.'},
+     {t:'Ich sage: „Überall!"',ok:false,fb:'Das hilft dem Arzt nicht. Zeige die genaue Stelle.'},
+     {t:'Ich sage nichts.',ok:false,fb:'Beim Arzt muss man die Beschwerden genau beschreiben!'},
+   ]},
+]},
+
+// ─── 8: Kochen & Ernährung ───
+{id:8,title:'Kochen mit Freunden',emoji:'🍳',topic:'Genitiv',xp:140,steps:[
+  {type:'scene',il:{emoji:'🥘',title:'Kochkurs Berlin',desc:'Du nimmst an einem Kochkurs teil und lernst neue Rezepte.'}},
+  {type:'dlg',npc:{name:'Kochlehrer Tom',em:'👨‍🍳'},
+   text:'Das ist das <span class="vhl" data-t="das Rezept = Anleitung zum Kochen (die Zutaten und Schritte)">Rezept</span> <span class="vhl" data-t="meiner Großmutter = Genitiv, feminin: von meiner Großmutter">meiner Großmutter</span>. Es ist das beste Gulasch der Welt!'},
+  {type:'gram',title:'Genitiv – Zugehörigkeit ausdrücken',
+   tbl:{h:['Genus','Nominativ','Genitiv','Beispiel'],
+        r:[['Maskulin','der','des + (e)s','das Auto des Mannes'],
+           ['Feminin','die','der','die Tasche der Frau'],
+           ['Neutrum','das','des + (e)s','das Ende des Kurses'],
+           ['Plural','die','der','die Meinungen der Leute']]},
+   tip:'<strong>Genitiv = Zugehörigkeit</strong> – antwortet auf die Frage: „Wessen?" z.B.: „Das ist das Buch DES Lehrers."'},
+  {type:'mc',q:'„Das ist die Tasche _____ Lehrerin." (Genitiv, feminin)',
+   opts:['des','der','dem','die'],cor:1,
+   okFB:'Richtig! Genitiv feminin: die Lehrerin → der Lehrerin.',
+   noFB:'Genitiv feminin: die → der. „die Tasche der Lehrerin"'},
+  {type:'fill',q:'„Das ist die Idee _____ Chefs." (Genitiv, maskulin)',
+   ans:'des',hint:'Genitiv maskulin: der → des (+ s beim Nomen)',
+   okFB:'Super! Genitiv maskulin: der → des. „die Idee des Chefs"',
+   noFB:'Genitiv maskulin: der → des → die Idee des Chefs'},
+  {type:'vocab',title:'Kochen & Ernährung',
+   items:[
+     {w:'die Zutat',a:'feminin',h:'ein Bestandteil in einem Rezept (Mehl, Eier, Zucker...)'},
+     {w:'das Rezept',a:'neutrum',h:'schriftliche Anleitung zum Kochen'},
+     {w:'würzen',a:'Verb',h:'Gewürze hinzufügen (Salz, Pfeffer, Kräuter)'},
+     {w:'gesund',a:'Adjektiv',h:'gut für den Körper, nicht krank machend'},
+     {w:'die Portion',a:'feminin',h:'eine Menge Essen für eine Person'},
+     {w:'braten',a:'Verb',h:'in der Pfanne mit Öl erhitzen'},
+   ]},
+]},
+
+// ─── 9: Gesunder Lebensstil ───
+{id:9,title:'Gesund leben',emoji:'🥗',topic:'Konjunktiv II & Genitiv üben',xp:140,steps:[
+  {type:'scene',il:{emoji:'🧘',title:'Fitnessstudio & Beratung',desc:'Ein Ernährungsberater gibt dir Tipps für einen gesunden Lebensstil.'}},
+  {type:'dlg',npc:{name:'Ernährungsberaterin Frau Sommer',em:'👩‍🔬'},
+   text:'Sie <span class="vhl" data-t="sollten = Konjunktiv II von sollen = Ratschlag/Empfehlung">sollten</span> mehr Gemüse essen und weniger Zucker. Ich <span class="vhl" data-t="würde empfehlen = Konjunktiv II von empfehlen">würde empfehlen</span>, täglich 30 Minuten zu bewegen.'},
+  {type:'mc',q:'Welcher Satz enthält einen Konjunktiv II?',
+   opts:['Ich esse jeden Tag Gemüse.','Ich würde gern mehr Sport machen.','Er trinkt viel Wasser.','Sie schläft früh.'],
+   cor:1,
+   okFB:'Richtig! „würde" ist Konjunktiv II von „werden".',
+   noFB:'Konjunktiv II erkennst du an: würde, könnte, sollte, müsste...'},
+  {type:'fill',q:'„Sie _____ mehr schlafen. Das wäre gut für Ihre Gesundheit." (Konjunktiv II, sollen)',
+   ans:'sollten',hint:'sollen → Konjunktiv II (Sie, höflich): s_____ten',
+   okFB:'Perfekt! „sollten" = Konjunktiv II von sollen (höflicher Ratschlag).',
+   noFB:'sollen → Konjunktiv II → sollten'},
+  {type:'mc',q:'„Das ist die Empfehlung _____ Arztes." (Genitiv, maskulin)',
+   opts:['des','der','dem','die'],cor:0,
+   okFB:'Richtig! Genitiv maskulin: der Arzt → des Arztes.',
+   noFB:'Genitiv maskulin: der → des (+es): des Arztes'},
+  {type:'choice',pr:'Die Beraterin fragt: „Treiben Sie regelmäßig Sport?" Was antwortest du ehrlich?',
+   chs:[
+     {t:'Ich könnte mehr Sport machen. Im Moment treibe ich leider nicht genug Sport.',ok:true,fb:'Ehrlich und mit Konjunktiv II! Sehr gut.'},
+     {t:'Sport? Nein!',ok:false,fb:'Zu kurz! Erkläre dich und nutze den Konjunktiv II für Absichten.'},
+     {t:'Ich bin sehr sportlich.',ok:false,fb:'Das klingt wenig glaubwürdig, wenn du beim Ernährungsberater bist!'},
+   ]},
+]},
+
+// ─── 10: Stadtleben ───
+{id:10,title:'Mein Viertel',emoji:'🏙️',topic:'Adjektivdeklination',xp:150,steps:[
+  {type:'scene',il:{emoji:'🗺️',title:'Stadtspaziergang',desc:'Du erkundest dein neues Stadtquartier in Köln.'}},
+  {type:'dlg',npc:{name:'Nachbar Klaus',em:'👴'},
+   text:'Das ist ein <span class="vhl" data-t="schönes Viertel = Adjektiv + Nomen, unbestimmter Artikel, Neutrum">schönes Viertel</span>! Es gibt hier viele <span class="vhl" data-t="alte Häuser = Adjektiv + Nomen, Plural">alte Häuser</span> und einen großen Park.'},
+  {type:'gram',title:'Adjektivdeklination – nach unbestimmtem Artikel (ein-)',
+   tbl:{h:['Kasus','Maskulin','Feminin','Neutrum','Plural (kein Art.)'],
+        r:[['Nominativ','ein alter Mann','eine alte Frau','ein altes Haus','alte Häuser'],
+           ['Akkusativ','einen alten Mann','eine alte Frau','ein altes Haus','alte Häuser'],
+           ['Dativ','einem alten Mann','einer alten Frau','einem alten Haus','alten Häusern'],
+           ['Genitiv','eines alten Mannes','einer alten Frau','eines alten Hauses','alter Häuser']]},
+   tip:'<strong>Faustregel:</strong> Wenn der Artikel die Endung zeigt (der, die, das) → Adjektiv endet auf -en. Wenn nicht (ein, kein) → Adjektiv trägt die Endung.'},
+  {type:'mc',q:'„Das ist ein _____ Restaurant." (schön, Neutrum, Nominativ)',
+   opts:['schöner','schöne','schönes','schönen'],cor:2,
+   okFB:'Richtig! ein + Neutrum Nominativ → schönes (Adjektiv trägt Endung).',
+   noFB:'Neutrum, unbestimmter Artikel, Nominativ → -es: ein schönes Restaurant'},
+  {type:'fill',q:'„Ich sehe einen _____ Mann." (alt, Maskulin, Akkusativ)',
+   ans:'alten',hint:'unbestimmter Artikel + Maskulin + Akkusativ: Adjektiv → _____en',
+   okFB:'Super! Akkusativ maskulin → alten: einen alten Mann.',
+   noFB:'Akkusativ maskulin nach ein/einen → Adjektiv -en: alten'},
+]},
+
+// ─── 11: Reiseplanung ───
+{id:11,title:'Reise nach Wien',emoji:'✈️',topic:'Komparativ & Superlativ',xp:150,steps:[
+  {type:'scene',il:{emoji:'🏛️',title:'Reisebüro',desc:'Du planst eine Reise nach Wien und vergleichst verschiedene Optionen.'}},
+  {type:'dlg',npc:{name:'Reiseberaterin Petra',em:'👩‍💼'},
+   text:'Wien ist <span class="vhl" data-t="schöner als = Komparativ von schön + als">schöner als</span> viele andere Städte. Es ist auch <span class="vhl" data-t="einer der sichersten = Superlativ: am sichersten / der/die/das -ste">eine der sichersten</span> Großstädte Europas!'},
+  {type:'gram',title:'Komparativ & Superlativ',
+   tbl:{h:['Grundform','Komparativ','Superlativ'],
+        r:[['schön','schöner','am schönsten / der schönste'],
+           ['groß','größer','am größten / der größte'],
+           ['gut','besser','am besten / der beste'],
+           ['viel','mehr','am meisten / das meiste'],
+           ['gern','lieber','am liebsten'],
+           ['teuer','teurer','am teuersten']]},
+   tip:'<strong>Komparativ:</strong> Adjektiv + -er + „als". <strong>Superlativ:</strong> am + Adjektiv + -sten. Umlaut bei: alt, groß, jung, kalt, warm, klug, kurz, lang, arm, stark.'},
+  {type:'mc',q:'„Berlin ist _____ München." (groß – Komparativ)',
+   opts:['größer als','am größten','große als','größte'],cor:0,
+   okFB:'Richtig! Komparativ: größer + als = größer als München.',
+   noFB:'Komparativ + als: größer als'},
+  {type:'fill',q:'„Das _____ Restaurant in Wien ist das Café Central." (gut – Superlativ)',
+   ans:'beste',hint:'gut → Superlativ: das b___ste',
+   okFB:'Super! gut → am besten / das beste.',
+   noFB:'gut → Superlativ: best- → das beste Restaurant'},
+  {type:'mc',q:'„Wien ist eine der _____ Städte der Welt." (schön – Superlativ)',
+   opts:['schönste','schönsten','schöner','am schönsten'],cor:1,
+   okFB:'Richtig! „eine der schönsten" – Genitiv Plural nach Superlativ.',
+   noFB:'„eine der schönsten Städte" – Superlativ im Genitiv Plural → -sten'},
+]},
+
+// ─── 12: Kulturveranstaltungen ───
+{id:12,title:'Museen & Kultur',emoji:'🎭',topic:'Adjektive & Vergleiche üben',xp:150,steps:[
+  {type:'scene',il:{emoji:'🖼️',title:'Kunstmuseum',desc:'Du besuchst mit einem Freund ein Kunstmuseum.'}},
+  {type:'dlg',npc:{name:'Freund Jonas',em:'🧑‍🎨'},
+   text:'Dieses Bild ist <span class="vhl" data-t="interessanter = Komparativ von interessant">interessanter</span> als das andere. Ich finde moderne Kunst <span class="vhl" data-t="am spannendsten = Superlativ">am spannendsten</span>!'},
+  {type:'vocab',title:'Kunst & Kultur',
+   items:[
+     {w:'die Ausstellung',a:'feminin',h:'Kunst oder Objekte werden öffentlich gezeigt'},
+     {w:'das Gemälde',a:'neutrum',h:'ein gemaltes Bild (Ölmalerei, Wasserfarben usw.)'},
+     {w:'beeindruckend',a:'Adjektiv',h:'sehr beeindruckend, man ist überrascht und begeistert'},
+     {w:'der Eintritt',a:'maskulin',h:'Preis, den man zahlt um einzugehen'},
+     {w:'führen',a:'Verb',h:'Besucher durch etwas leiten (Führung = tour)'},
+     {w:'zeitgenössisch',a:'Adjektiv',h:'modern, aus unserer Zeit'},
+   ]},
+  {type:'mc',q:'„Dieses Museum ist _____ das andere." (interessant – Komparativ)',
+   opts:['interessanter als','am interessantesten','interessante als','interessant wie'],
+   cor:0,
+   okFB:'Richtig! Komparativ: interessanter + als.',
+   noFB:'Komparativ: Adjektiv + -er + als: interessanter als'},
+  {type:'fill',q:'„Das Pergamonmuseum ist _____ Museum Berlins." (bekannt – Superlativ)',
+   ans:'bekannteste',hint:'bekannt → Superlativ: bekannt___te',
+   okFB:'Super! bekannteste – Superlativ mit bestimmtem Artikel.',
+   noFB:'bekannt → Superlativ: bekannteste (das bekannteste Museum)'},
+]},
+
+// ─── 13: Post & Behörden ───
+{id:13,title:'Auf der Post',emoji:'📮',topic:'Indirekte Fragen',xp:160,steps:[
+  {type:'scene',il:{emoji:'📬',title:'Deutsche Post',desc:'Du musst ein Paket aufgeben und hast Fragen.'}},
+  {type:'dlg',npc:{name:'Postmitarbeiterin',em:'👩‍💼'},
+   text:'Kann ich Ihnen helfen?'},
+  {type:'gram',title:'Indirekte Fragen',
+   tbl:{h:['Direkte Frage','Indirekte Frage','Einleitung'],
+        r:[['Wo ist das Postamt?','Ich frage mich, wo das Postamt ist.','Ich frage mich, ...'],
+           ['Wann kommt das Paket an?','Er fragt, wann das Paket ankommt.','Er fragt, ...'],
+           ['Kostet das viel?','Ich möchte wissen, ob das viel kostet.','ob (Ja/Nein-Fragen)'],
+           ['Ist das richtig?','Sie fragt, ob das richtig ist.','ob (Ja/Nein-Fragen)']]},
+   tip:'<strong>Regel:</strong> In indirekten Fragen → Verb geht ans SATZENDE! Bei Ja/Nein-Fragen: Einleitung mit „ob".'},
+  {type:'mc',q:'Mache eine indirekte Frage: „Wo ist der Schalter?"',
+   opts:['Ich frage mich, wo ist der Schalter.','Ich frage mich, wo der Schalter ist.','Ich frage mich, ob wo der Schalter ist.','Ich frage mich wo der Schalter.'],
+   cor:1,
+   okFB:'Richtig! Indirekte Frage: Verb ans Ende! „...wo der Schalter ist."',
+   noFB:'Indirekte Frage: Verb ans ENDE! „wo der Schalter IST"'},
+  {type:'fill',q:'„Ich weiß nicht, _____ das Paket so teuer ist." (ob/warum – Grund)',
+   ans:'warum',hint:'Ich frage nach dem Grund → w_____',
+   okFB:'Super! „warum" fragt nach dem Grund. Verb bleibt am Ende.',
+   noFB:'Grund → warum: „Ich weiß nicht, warum das Paket so teuer ist."'},
+  {type:'mc',q:'„Kannst du mir sagen, _____ morgen die Post geöffnet ist?" (Ja/Nein-Frage → ob)',
+   opts:['ob','wo','was','wann'],cor:0,
+   okFB:'Richtig! Ja/Nein-Fragen werden mit „ob" eingeleitet.',
+   noFB:'Ja/Nein-Frage → indirekte Einleitung: ob'},
+]},
+
+// ─── 14: Bank & Finanzen ───
+{id:14,title:'Bei der Bank',emoji:'🏦',topic:'Dass-Sätze',xp:160,steps:[
+  {type:'scene',il:{emoji:'💳',title:'Bankfiliale',desc:'Du möchtest ein Konto eröffnen und sprichst mit einem Berater.'}},
+  {type:'dlg',npc:{name:'Bankberater Herr Winter',em:'👨‍💼'},
+   text:'Es ist wichtig, <span class="vhl" data-t="dass = Konjunktion für Nebensätze, Verb geht ans Ende">dass</span> Sie alle Dokumente mitbringen. Ich empfehle, dass Sie auch einen <span class="vhl" data-t="der Reisepass = amtliches Ausweisdokument">Reisepass</span> dabei haben.'},
+  {type:'gram',title:'Dass-Sätze',
+   tbl:{h:['Hauptsatz','Einleitung','Nebensatz (Verb am Ende)'],
+        r:[['Ich glaube,','dass','er Recht hat.'],
+           ['Es ist wichtig,','dass','du pünktlich bist.'],
+           ['Ich weiß,','dass','sie morgen kommt.'],
+           ['Er sagt,','dass','das Konto kostenlos ist.'],
+           ['Ich hoffe,','dass','es klappt.']]},
+   tip:'<strong>dass-Satz:</strong> Das Verb steht immer am ENDE des Nebensatzes. Komma vor „dass"!'},
+  {type:'mc',q:'„Ich glaube, dass er morgen _____ ." (kommen)',
+   opts:['kommt','ist kommen','kommt er','kommen'],cor:0,
+   okFB:'Richtig! Im dass-Satz: Verb ans Ende – er kommt.',
+   noFB:'Nebensatz: Verb ans ENDE: „...dass er morgen kommt."'},
+  {type:'fill',q:'„Es freut mich, _____ Sie uns besuchen." (Einleitung des Nebensatzes)',
+   ans:'dass',hint:'Konjunktion für Nebensätze: d____',
+   okFB:'Perfekt! „dass" leitet den Nebensatz ein.',
+   noFB:'Nebensatz-Konjunktion: dass'},
+  {type:'choice',pr:'Der Berater fragt: „Haben Sie Fragen zum Konto?" Was fragst du?',
+   chs:[
+     {t:'Ja. Können Sie mir erklären, dass das Konto kostenlos ist?',ok:false,fb:'„dass" leitet keine Fragen ein! Frage: „Könnten Sie mir erklären, ob das Konto kostenlos ist?"'},
+     {t:'Ich möchte wissen, ob ich das Konto online verwalten kann.',ok:true,fb:'Toll! Indirekte Frage mit „ob" – korrekt!'},
+     {t:'Das Konto ist teuer?',ok:false,fb:'Formuliere höflicher als indirekte Frage!'},
+   ]},
+]},
+
+// ─── 15: Medien & Kommunikation ───
+{id:15,title:'Medien & Nachrichten',emoji:'📱',topic:'Ob & Dass üben',xp:160,steps:[
+  {type:'scene',il:{emoji:'📺',title:'Mediengespräch',desc:'Du diskutierst mit Freunden über soziale Medien und Nachrichten.'}},
+  {type:'dlg',npc:{name:'Freund Kai',em:'🧑‍💻'},
+   text:'Glaubst du, <span class="vhl" data-t="dass = Konjunktion, leitet Nebensatz ein, Verb am Ende">dass</span> soziale Medien mehr schaden als nützen? Ich weiß nicht, ob das wirklich stimmt.'},
+  {type:'vocab',title:'Medien & Kommunikation',
+   items:[
+     {w:'die Nachricht',a:'feminin',h:'Information über aktuelle Ereignisse; auch: private Textnachricht'},
+     {w:'berichten',a:'Verb',h:'über etwas informieren, Nachrichten verbreiten'},
+     {w:'teilen',a:'Verb',h:'etwas mit anderen teilen (auch: online teilen = posten)'},
+     {w:'glaubwürdig',a:'Adjektiv',h:'kann man glauben, zuverlässig'},
+     {w:'die Meinung',a:'feminin',h:'was jemand denkt, die persönliche Ansicht'},
+     {w:'beeinflussen',a:'Verb',h:'auf jemanden oder etwas einwirken, verändern'},
+   ]},
+  {type:'mc',q:'„Ich bin nicht sicher, _____ die Nachricht wahr ist." (Ja/Nein → ob)',
+   opts:['dass','ob','weil','denn'],cor:1,
+   okFB:'Richtig! Ja/Nein-Frage als Nebensatz → ob.',
+   noFB:'Ja/Nein in Nebensatz → ob: „...ob die Nachricht wahr ist."'},
+  {type:'fill',q:'„Ich denke, _____ wir kritisch denken müssen." (dass)',
+   ans:'dass',hint:'Konjunktion für Meinungen/Gedanken: d____',
+   okFB:'Genau! „dass" für Gedanken und Meinungen.',
+   noFB:'Gedanken/Meinungen: Ich denke, dass...'},
+]},
+
+// ─── 16: Jobinterview ───
+{id:16,title:'Das Bewerbungsgespräch',emoji:'🎯',topic:'weil & obwohl',xp:170,steps:[
+  {type:'scene',il:{emoji:'👔',title:'Vorstellungsgespräch',desc:'Du hast ein Vorstellungsgespräch bei einer deutschen Firma.'}},
+  {type:'dlg',npc:{name:'Personalchef Herr Braun',em:'👨‍💼'},
+   text:'Warum möchten Sie bei uns arbeiten, <span class="vhl" data-t="obwohl = Konjunktion: Gegensatz/Widerspruch (trotzdem)">obwohl</span> Sie noch nicht so viel Erfahrung haben?'},
+  {type:'gram',title:'Konjunktionen: weil & obwohl',
+   tbl:{h:['Konjunktion','Bedeutung','Beispiel'],
+        r:[['weil','Grund/Ursache','Ich lerne Deutsch, weil ich in Deutschland arbeiten möchte.'],
+           ['obwohl','Gegensatz/Widerspruch','Ich bin glücklich, obwohl es regnet.'],
+           ['damit','Zweck/Ziel','Ich lerne, damit ich die Prüfung bestehe.'],
+           ['wenn','Bedingung/Zeitpunkt','Wenn ich Zeit habe, koche ich gern.']]},
+   tip:'<strong>Alle diese Konjunktionen</strong> schicken das Verb ans Satzende! Komma vor der Konjunktion.'},
+  {type:'mc',q:'„Ich bewerbe mich hier, _____ die Arbeit interessant ist." (Grund)',
+   opts:['obwohl','weil','damit','wenn'],cor:1,
+   okFB:'Richtig! Grund → weil. Verb steht am Ende des Nebensatzes.',
+   noFB:'Grund angeben → weil: „...weil die Arbeit interessant ist."'},
+  {type:'fill',q:'„Er hat die Stelle bekommen, _____ er keine Erfahrung hatte." (Widerspruch)',
+   ans:'obwohl',hint:'Widerspruch/trotzdem → o_____hl',
+   okFB:'Super! „obwohl" = Widerspruch (trotzdem). Verb am Ende.',
+   noFB:'Widerspruch → obwohl: „...obwohl er keine Erfahrung hatte."'},
+  {type:'choice',pr:'„Warum wollen Sie in Deutschland leben?" – Antworte mit „weil".',
+   chs:[
+     {t:'Ich möchte in Deutschland leben, weil ich meine Deutschkenntnisse verbessern und neue Chancen finden will.',ok:true,fb:'Perfekt! „weil" mit Verb am Ende.'},
+     {t:'Weil Deutschland ist schön.',ok:false,fb:'Verb ans Ende! Richtig: „weil Deutschland schön ist."'},
+     {t:'Ich lebe in Deutschland, obwohl ich es mag.',ok:false,fb:'„obwohl" ist für Widersprüche. Hier brauchst du „weil" für den Grund.'},
+   ]},
+]},
+
+// ─── 17: Bewerbung schreiben ───
+{id:17,title:'Die Bewerbung',emoji:'📝',topic:'Futur I',xp:170,steps:[
+  {type:'scene',il:{emoji:'💌',title:'Schreibtisch zuhause',desc:'Du schreibst eine Bewerbung für eine Stelle als Projektmanager.'}},
+  {type:'dlg',npc:{name:'Karrierecoach Anna',em:'👩‍💼'},
+   text:'In Ihrer Bewerbung <span class="vhl" data-t="werden Sie beschreiben = Futur I: werden + Infinitiv">werden Sie beschreiben</span>, warum Sie die beste Wahl sind. Das <span class="vhl" data-t="wird beeindrucken = Futur I, Prognose">wird sicher beeindrucken</span>!'},
+  {type:'gram',title:'Futur I – werden + Infinitiv',
+   tbl:{h:['Pronomen','werden','+ Infinitiv'],
+        r:[['ich','werde','arbeiten'],['du','wirst','kommen'],['er/sie/es','wird','sein'],
+           ['wir','werden','machen'],['ihr','werdet','gehen'],['sie/Sie','werden','lernen']]},
+   tip:'<strong>Futur I</strong> benutzt man für: Zukunftspläne, Versprechen, Vorhersagen. Im Alltag oft auch Präsens mit Zeitangabe: „Ich arbeite morgen."'},
+  {type:'mc',q:'„Nächstes Jahr _____ ich in Deutschland studieren." (Futur I, ich)',
+   opts:['werde','wirst','wird','werden'],cor:0,
+   okFB:'Richtig! Futur I: ich werde studieren.',
+   noFB:'Futur I: ich werde + Infinitiv: ich werde studieren.'},
+  {type:'fill',q:'„Die Firma _____ bald neue Mitarbeiter einstellen." (Futur I, sie)',
+   ans:'wird',hint:'Futur I → sie (3. Person Singular) + _____ (werden)',
+   okFB:'Perfekt! sie wird + Infinitiv am Ende.',
+   noFB:'Futur I, 3. Person Singular → wird: „Die Firma wird einstellen."'},
+  {type:'mc',q:'„Wir _____ alles versuchen, um die Stelle zu bekommen." (Futur I)',
+   opts:['werden','werde','wird','werdet'],cor:0,
+   okFB:'Richtig! wir werden + Infinitiv.',
+   noFB:'Futur I: wir werden + Infinitiv'},
+]},
+
+// ─── 18: Zukunftspläne ───
+{id:18,title:'Träume & Pläne',emoji:'🌟',topic:'Futur I & weil/obwohl üben',xp:170,steps:[
+  {type:'scene',il:{emoji:'🚀',title:'Zukunftsplanung',desc:'Du sprichst mit deiner Familie über deine Zukunftspläne.'}},
+  {type:'dlg',npc:{name:'Mutter',em:'👩‍🦱'},
+   text:'Was <span class="vhl" data-t="wirst du machen = Futur I, Frage">wirst du machen</span>, wenn du deine Ausbildung abgeschlossen hast?'},
+  {type:'mc',q:'„Ich weiß noch nicht, ob ich in Deutschland bleiben oder zurückgehen _____." (Futur I)',
+   opts:['werde','wird','wirst','würde'],cor:0,
+   okFB:'Richtig! Futur I, ich werde... im Nebensatz.',
+   noFB:'Futur I, ich: werde (im Nebensatz ans Ende: ...zurückgehen werde)'},
+  {type:'fill',q:'„Ich werde Deutsch lernen, _____ ich bessere Chancen habe." (Zweck)',
+   ans:'damit',hint:'Zweck/Ziel → d_____t',
+   okFB:'Super! „damit" drückt einen Zweck aus: ich lerne, damit ich Chancen habe.',
+   noFB:'Zweck/Ziel → damit: ich werde lernen, damit ich...'},
+  {type:'choice',pr:'Was sind deine Zukunftspläne? Wähle die vollständigste Antwort.',
+   chs:[
+     {t:'Ich werde hart arbeiten, weil ich erfolgreich sein möchte. Außerdem werde ich weiterhin Deutsch lernen.',ok:true,fb:'Ausgezeichnet! Futur I + weil – alles korrekt!'},
+     {t:'Ich werde gut.',ok:false,fb:'Das ist zu kurz und grammatisch unvollständig.'},
+     {t:'Ich mache Zukunftspläne.',ok:false,fb:'Erzähle mehr! Was genau wirst du tun?'},
+   ]},
+]},
+
+// ─── 19: Traditionen & Feiertage ───
+{id:19,title:'Deutsche Traditionen',emoji:'🎄',topic:'Relativsätze',xp:180,steps:[
+  {type:'scene',il:{emoji:'🪔',title:'Weihnachtsmarkt',desc:'Du besucht einen Weihnachtsmarkt in Nürnberg.'}},
+  {type:'dlg',npc:{name:'Marktverkäufer',em:'🧑‍🎄'},
+   text:'Das ist Glühwein, <span class="vhl" data-t="der zu Weihnachten gehört = Relativsatz mit der (maskulin)">der zu Weihnachten gehört</span>! Und hier sind Lebkuchen, <span class="vhl" data-t="die typisch deutsch sind = Relativsatz mit die (Plural)">die typisch deutsch sind</span>.'},
+  {type:'gram',title:'Relativsätze',
+   tbl:{h:['Genus','Relativpronomen','Beispiel'],
+        r:[['Maskulin (der)','der','Das ist der Mann, der Deutsch lehrt.'],
+           ['Feminin (die)','die','Das ist die Frau, die aus Wien kommt.'],
+           ['Neutrum (das)','das','Das ist das Buch, das ich empfehle.'],
+           ['Plural (die)','die','Das sind die Kinder, die hier spielen.'],
+           ['Maskulin Akkusativ','den','Ich kenne den Mann, den du meinst.'],
+           ['Maskulin Dativ','dem','Das ist der Freund, mit dem ich reise.']]},
+   tip:'<strong>Relativpronomen = bestimmter Artikel</strong> (fast). Verb steht am Ende des Relativsatzes. Komma vor dem Relativpronomen!'},
+  {type:'mc',q:'„Das ist der Wein, _____ sehr gut schmeckt." (maskulin, Nominativ)',
+   opts:['die','das','den','der'],cor:3,
+   okFB:'Richtig! maskulin Nominativ im Relativsatz → der.',
+   noFB:'Maskulin, Nominativ → Relativpronomen: der'},
+  {type:'fill',q:'„Das ist die Stadt, _____ ich am liebsten mag." (feminin, Akkusativ)',
+   ans:'die',hint:'feminin Akkusativ Relativpronomen: d__',
+   okFB:'Perfekt! feminin Akkusativ → die (bleibt gleich).',
+   noFB:'Feminin Akkusativ Relativpronomen: die'},
+  {type:'mc',q:'„Das sind die Kinder, _____ auf dem Spielplatz spielen." (Plural, Nominativ)',
+   opts:['der','das','den','die'],cor:3,
+   okFB:'Richtig! Plural Nominativ → Relativpronomen die.',
+   noFB:'Plural, Nominativ → Relativpronomen: die'},
+]},
+
+// ─── 20: Umwelt & Politik ───
+{id:20,title:'Umwelt & Zukunft',emoji:'🌱',topic:'Passiv',xp:180,steps:[
+  {type:'scene',il:{emoji:'♻️',title:'Umweltdiskussion',desc:'In der Schule diskutiert ihr über Umweltprobleme.'}},
+  {type:'dlg',npc:{name:'Lehrerin Frau Koch',em:'👩‍🏫'},
+   text:'Jedes Jahr <span class="vhl" data-t="werden Bäume gefällt = Passiv (Präsens): werden + Partizip II">werden Millionen von Bäumen gefällt</span>. Außerdem <span class="vhl" data-t="wird Energie verschwendet = Passiv Präsens">wird zu viel Energie verschwendet</span>.'},
+  {type:'gram',title:'Passiv – Präsens',
+   tbl:{h:['Aktiv','Passiv (Präsens)','Bildung'],
+        r:[['Man pflanzt Bäume.','Bäume werden gepflanzt.','werden + Partizip II'],
+           ['Der Arzt behandelt den Patienten.','Der Patient wird behandelt.','werden + Part. II'],
+           ['Alle trinken Wasser.','Wasser wird getrunken.','werden + Part. II']]},
+   tip:'<strong>Passiv:</strong> Das Objekt der Handlung wird zum Subjekt. „werden" konjugieren + Partizip II ans Ende. Das Agens (Täter) kann mit „von + Dativ" ergänzt werden.'},
+  {type:'mc',q:'„Viel Plastik _____ produziert." (Passiv Präsens)',
+   opts:['wird','werden','ist','hat'],cor:0,
+   okFB:'Richtig! Passiv Präsens: wird + Partizip II.',
+   noFB:'Passiv Präsens: wird (Singular) + Partizip II'},
+  {type:'fill',q:'„In Deutschland _____ viel recycelt." (Passiv Präsens, Plural/allgemein)',
+   ans:'wird',hint:'Passiv Präsens: w___ + Partizip II',
+   okFB:'Super! Passiv Präsens: wird recycelt.',
+   noFB:'Passiv Präsens: wird + Partizip II'},
+  {type:'mc',q:'Ändere in Passiv: „Man benutzt erneuerbare Energie."',
+   opts:['Erneuerbare Energie wird benutzt.','Erneuerbare Energie hat benutzt.','Erneuerbare Energie benutzt wird.','Man wird erneuerbare Energie benutzt.'],
+   cor:0,
+   okFB:'Perfekt! Passiv: Erneuerbare Energie wird benutzt.',
+   noFB:'Passiv: Objekt → Subjekt + wird + Partizip II'},
+]},
+
+// ─── 21: Nachrichten & Gesellschaft ───
+{id:21,title:'Aktuelles Geschehen',emoji:'📰',topic:'Relativsätze & Passiv üben',xp:180,steps:[
+  {type:'scene',il:{emoji:'🌐',title:'Nachrichtensendung',desc:'Du schaust die Abendnachrichten und diskutierst mit deinem Mitbewohner.'}},
+  {type:'dlg',npc:{name:'Mitbewohner Felix',em:'🧑‍💻'},
+   text:'Hast du gehört? Das Gesetz, <span class="vhl" data-t="das letztes Jahr eingeführt wurde = Relativsatz + Passiv Präteritum">das letztes Jahr eingeführt wurde</span>, wird jetzt geändert.'},
+  {type:'mc',q:'„Das Gebäude, _____ gerade renoviert wird, ist sehr alt." (Neutrum, Nominativ)',
+   opts:['der','die','das','den'],cor:2,
+   okFB:'Richtig! Neutrum Nominativ Relativpronomen: das.',
+   noFB:'Neutrum, Nominativ → Relativpronomen: das'},
+  {type:'fill',q:'„Viele Gesetze _____ jedes Jahr geändert." (Passiv Präsens, Plural)',
+   ans:'werden',hint:'Passiv Präsens Plural: w_____en + Partizip II',
+   okFB:'Super! Plural Passiv: werden geändert.',
+   noFB:'Passiv Plural: werden + Partizip II'},
+  {type:'choice',pr:'Felix fragt: „Was denkst du: Wird die Politik die Umwelt schützen?" Antworte mit Relativsatz.',
+   chs:[
+     {t:'Ich hoffe, dass die Politiker, die gewählt wurden, ihre Versprechen halten.',ok:true,fb:'Wunderbar! Relativsatz + dass-Satz kombiniert.'},
+     {t:'Vielleicht ja.',ok:false,fb:'Zu kurz! Formuliere einen vollständigen Satz mit Begründung.'},
+     {t:'Politik ist schwer.',ok:false,fb:'Antworte auf die Frage mit einem Relativsatz!'},
+   ]},
+]},
+
+// ─── 22: Nachbarschaft ───
+{id:22,title:'Gute Nachbarn',emoji:'🏘️',topic:'Reflexive Verben',xp:190,steps:[
+  {type:'scene',il:{emoji:'🤝',title:'Hausgemeinschaft',desc:'Du lernst deine neuen Nachbarn kennen.'}},
+  {type:'dlg',npc:{name:'Nachbarin Frau Müller',em:'👵'},
+   text:'Schön, Sie kennenzulernen! Ich <span class="vhl" data-t="freue mich = reflexives Verb: sich freuen (Dativ/Akkusativ-Reflexivpronomen)">freue mich</span> immer, wenn neue Leute einziehen. Haben Sie <span class="vhl" data-t="sich eingelebt = reflexives Verb: sich einleben">sich schon eingelebt</span>?'},
+  {type:'gram',title:'Reflexive Verben',
+   tbl:{h:['Pronomen','Reflexivpron. (Akk.)','Beispiel'],
+        r:[['ich','mich','Ich freue mich.'],['du','dich','Freust du dich?'],
+           ['er/sie/es','sich','Er erinnert sich.'],['wir','uns','Wir treffen uns.'],
+           ['ihr','euch','Ihr beeilt euch.'],['sie/Sie','sich','Sie erholen sich.']]},
+   tip:'<strong>Häufige reflexive Verben:</strong> sich freuen, sich erinnern, sich befinden, sich treffen, sich erholen, sich vorstellen, sich bewerben, sich anmelden.'},
+  {type:'mc',q:'„Er _____ jeden Morgen die Zähne." (sich putzen)',
+   opts:['putzt sich','sich putzt','putzt mich','putze sich'],cor:0,
+   okFB:'Richtig! er + sich: „Er putzt sich die Zähne."',
+   noFB:'Reflexiv: Pronomen nach dem Verb: „Er putzt SICH die Zähne."'},
+  {type:'fill',q:'„Wir _____ auf das Treffen." (sich freuen, wir)',
+   ans:'freuen uns',hint:'sich freuen, wir: freuen + Reflexivpronomen für wir',
+   okFB:'Super! Wir freuen uns – Reflexivpronomen: uns.',
+   noFB:'sich freuen, wir → wir freuen uns'},
+  {type:'vocab',title:'Nachbarschaft & Gemeinschaft',
+   items:[
+     {w:'die Hausordnung',a:'feminin',h:'Regeln im Haus für alle Bewohner'},
+     {w:'sich beschweren',a:'reflexiv',h:'offiziell klagen oder Bescheid geben, wenn etwas stört'},
+     {w:'rücksichtsvoll',a:'Adjektiv',h:'auf andere achten, höflich und aufmerksam'},
+     {w:'der Lärm',a:'maskulin',h:'störende, laute Geräusche'},
+     {w:'der Flur',a:'maskulin',h:'Gang/Korridor im Haus oder in der Wohnung'},
+     {w:'einziehen',a:'Verb',h:'neu in eine Wohnung kommen und einrichten'},
+   ]},
+]},
+
+// ─── 23: Konflikte lösen ───
+{id:23,title:'Probleme lösen',emoji:'💬',topic:'wenn & falls (Konditionalsätze)',xp:190,steps:[
+  {type:'scene',il:{emoji:'🤝',title:'Gespräch mit dem Nachbarn',desc:'Es gibt einen kleinen Konflikt wegen Lärm – du versuchst es freundlich zu lösen.'}},
+  {type:'dlg',npc:{name:'Nachbar Herr Weber',em:'👨‍🦳'},
+   text:'<span class="vhl" data-t="Falls = wenn/für den Fall, dass... (Bedingung)">Falls</span> die Musik wieder so laut ist, muss ich mich leider beschweren. Aber <span class="vhl" data-t="wenn wir reden = Konditionalsatz mit wenn">wenn wir darüber reden</span>, können wir sicher eine Lösung finden.'},
+  {type:'gram',title:'Konditionalsätze: wenn & falls',
+   tbl:{h:['Konjunktion','Bedeutung','Beispiel'],
+        r:[['wenn','allgemeine Bedingung / Wiederholung','Wenn du Zeit hast, ruf mich an.'],
+           ['falls','mögliche/unsichere Bedingung','Falls es regnet, bleiben wir zuhause.'],
+           ['wenn...dann','Betonte Bedingung','Wenn du mitkommst, dann freue ich mich.']]},
+   tip:'<strong>Wortstellung:</strong> Verb im Nebensatz ans Ende! Im Hauptsatz (wenn der Nebensatz vorne steht): Verb-Subjekt Inversion.'},
+  {type:'mc',q:'„_____ du Hilfe brauchst, kannst du mich anrufen." (Bedingung)',
+   opts:['Obwohl','Weil','Wenn','Dass'],cor:2,
+   okFB:'Richtig! Bedingung → wenn.',
+   noFB:'Bedingung → wenn: „Wenn du Hilfe brauchst, kannst du mich anrufen."'},
+  {type:'fill',q:'„_____ das Problem nicht gelöst wird, werde ich den Vermieter informieren." (mögliche Bedingung)',
+   ans:'Falls',hint:'mögliche/unsichere Bedingung: F____',
+   okFB:'Super! „Falls" = mögliche Bedingung.',
+   noFB:'Mögliche Bedingung: Falls'},
+  {type:'choice',pr:'Herr Weber klingt verärgert. Wie reagierst du am besten?',
+   chs:[
+     {t:'Entschuldigung! Falls das wieder passiert, werde ich sofort die Musik leiser machen.',ok:true,fb:'Sehr gut! Entschuldigung + Konjunktionssatz mit „falls".'},
+     {t:'Das ist nicht mein Problem!',ok:false,fb:'Das eskaliert den Konflikt. Zeige Verständnis!'},
+     {t:'OK.',ok:false,fb:'Zu kurz – erkläre dich und zeige Verständnis.'},
+   ]},
+]},
+
+// ─── 24: Gemeinschaft & Abschluss ───
+{id:24,title:'Gemeinschaft & Zukunft',emoji:'🌍',topic:'A2 Abschluss – alles zusammen',xp:200,steps:[
+  {type:'scene',il:{emoji:'🎓',title:'A2 Abschluss!',desc:'Du hast das komplette A2-Niveau erfolgreich gemeistert. Herzlichen Glückwunsch!'}},
+  {type:'dlg',npc:{name:'Deutschlehrerin Frau Bauer',em:'👩‍🏫'},
+   text:'Sie haben unglaublich viel gelernt! Die Sprache, <span class="vhl" data-t="die Sie gelernt haben = Relativsatz, feminin Akkusativ">die Sie gelernt haben</span>, wird Ihnen in Deutschland sehr helfen.'},
+  {type:'mc',q:'Welcher Satz ist grammatisch korrekt? (Relativsatz)',
+   opts:['Der Mann, der ich kenne, ist nett.','Der Mann, den ich kenne, ist nett.','Der Mann, dem ich kenne, ist nett.','Der Mann, die ich kenne, ist nett.'],
+   cor:1,
+   okFB:'Richtig! „kennen" braucht Akkusativ → den (maskulin, Akkusativ).',
+   noFB:'Akkusativ maskulin Relativpronomen: den → „den ich kenne"'},
+  {type:'mc',q:'„Ich bin froh, _____ ich Deutsch gelernt habe." (Konjunktion)',
+   opts:['weil','wenn','dass','ob'],cor:2,
+   okFB:'Richtig! Gefühle ausdrücken: ich bin froh, dass...',
+   noFB:'Freude/Gefühle: ich bin froh, DASS...'},
+  {type:'fill',q:'„Deutsch _____ in der ganzen Welt gesprochen." (Passiv Präsens)',
+   ans:'wird',hint:'Passiv Präsens: w___ + Partizip II',
+   okFB:'Super! Passiv: wird gesprochen.',
+   noFB:'Passiv Präsens: wird + Partizip II'},
+  {type:'choice',pr:'Wie fühlst du dich nach dem A2-Kurs? Antworte in einem vollständigen Satz!',
+   chs:[
+     {t:'Ich freue mich, weil ich jetzt besser Deutsch sprechen kann. Das wird mir sehr helfen!',ok:true,fb:'🎉 WUNDERBAR! Reflexives Verb + weil + Futur I – alles perfekt kombiniert! Herzlichen Glückwunsch zum A2-Abschluss!'},
+     {t:'Gut.',ok:false,fb:'Formuliere einen vollständigen Satz! Du kannst das!'},
+     {t:'Deutsch ist schwer.',ok:false,fb:'Stimmt manchmal – aber du hast das A2-Niveau geschafft! Sei stolz auf dich!'},
+   ]},
+]},
+];
+
+// ════════════════════════════════════════════════════════════
+// SCREEN NAVIGATION
+// ════════════════════════════════════════════════════════════
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById('scr-'+id).classList.add('active')}
+
+function startGame(){
+  S.name=document.getElementById('pname').value.trim()||'Spieler';
+  localStorage.setItem('da2_name',S.name);
+  show('map');renderMap();
+}
+
+function goMap(){show('map');renderMap();updateMapStats()}
+
+function updateMapStats(){
+  document.getElementById('disp-name').textContent=S.name;
+  document.getElementById('disp-xp').textContent=S.xp;
+  const lvl=S.xp<400?'A2.1':S.xp<900?'A2.2':S.xp<1600?'A2.3':'A2+';
+  document.getElementById('disp-lvl').textContent=lvl;
+  const pct=Math.round(S.done.length/CH.length*100);
+  document.getElementById('disp-pct').textContent=pct+'%';
+  document.getElementById('ovr-bar').style.width=pct+'%';
+}
+
+function renderMap(){
+  updateMapStats();
+  const grid=document.getElementById('ch-grid');
+  grid.innerHTML='';
+  CH.forEach((c,i)=>{
+    const comp=S.done.includes(c.id);
+    const open=i===0||S.done.includes(CH[i-1].id);
+    const d=document.createElement('div');
+    d.className='ch-card '+(comp?'done':open?'open':'locked');
+    d.innerHTML=`<span class="ce">${c.emoji}</span>
+      <div class="cn">Kapitel ${c.id}</div>
+      <div class="ct">${c.title}</div>
+      <div class="cg">${c.topic}</div>
+      <span class="ch-badge">${comp?'✅':open?'▶':'🔒'}</span>`;
+    if(open) d.onclick=()=>startCh(i);
+    grid.appendChild(d);
+  });
+}
+
+// ════════════════════════════════════════════════════════════
+// CHAPTER ENGINE
+// ════════════════════════════════════════════════════════════
+function startCh(idx){
+  S.chIdx=idx;S.step=0;S.hearts=3;S.chXP=0;
+  const c=CH[idx];
+  document.getElementById('g-chlbl').textContent=`Kapitel ${c.id}: ${c.title}`;
+  document.getElementById('g-xp').textContent=S.xp;
+  renderHearts();
+  show('game');
+  renderStep();
+}
+
+function renderHearts(){
+  const h=document.getElementById('g-hearts');
+  h.innerHTML=[...Array(3)].map((_,i)=>i<S.hearts?'❤️':'🖤').join('');
+}
+
+function renderStep(){
+  const c=CH[S.chIdx],st=c.steps[S.step],tot=c.steps.length;
+  document.getElementById('sbar').style.width=Math.round(S.step/tot*100)+'%';
+  document.getElementById('slbl').textContent=`Schritt ${S.step+1} / ${tot}`;
+  const sc=document.getElementById('scene');
+  sc.innerHTML='';
+  const R={scene:rScene,dlg:rDlg,gram:rGram,vocab:rVocab,mc:rMC,fill:rFill,choice:rChoice};
+  if(R[st.type]) R[st.type](sc,st);
+}
+
+function next(){
+  S.step++;
+  if(S.step>=CH[S.chIdx].steps.length) completeCh();
+  else renderStep();
+}
+
+// ════════════════════════════════════════════════════════════
+// RENDERERS
+// ════════════════════════════════════════════════════════════
+function rScene(sc,st){
+  sc.innerHTML=`<div class="s-illus">
+    <span class="bi">${st.il.emoji}</span>
+    <h3>${st.il.title}</h3>
+    <p>${st.il.desc}</p>
+  </div>
+  <button class="btn-cont" onclick="next()">Weiter →</button>`;
+}
+
+function rDlg(sc,st){
+  sc.innerHTML=`<div class="dlg">
+    <div class="npc-row">
+      <div class="npc-av">${st.npc.em}</div>
+      <div class="bubble">
+        <div class="npc-name">${st.npc.name}</div>
+        ${st.text}
+      </div>
+    </div>
+  </div>
+  <button class="btn-cont" style="margin-top:18px" onclick="next()">Weiter →</button>`;
+  sc.querySelectorAll('.vhl').forEach(el=>{
+    el.addEventListener('click',function(){
+      let tip=this.nextElementSibling;
+      if(!tip||!tip.classList.contains('vtip')){
+        const t=document.createElement('div');
+        t.className='vtip show';t.textContent=this.getAttribute('data-t');
+        this.parentNode.insertBefore(t,this.nextSibling);
+      } else tip.classList.toggle('show');
+    });
+  });
+}
+
+function rGram(sc,st){
+  const heads=st.tbl.h.map(h=>`<th>${h}</th>`).join('');
+  const rows=st.tbl.r.map(r=>`<tr>${r.map((c,i)=>i===0?`<td class="hi">${c}</td>`:`<td>${c}</td>`).join('')}</tr>`).join('');
+  sc.innerHTML=`<div class="gram-card">
+    <h3>📘 ${st.title}</h3>
+    <table class="gram-tbl"><thead><tr>${heads}</tr></thead><tbody>${rows}</tbody></table>
+    <div class="gram-tip">💡 ${st.tip}</div>
+  </div>
+  <button class="btn-cont" style="margin-top:16px" onclick="next()">Verstanden ✓</button>`;
+}
+
+function rVocab(sc,st){
+  sc.innerHTML=`<div class="sec-title">📖 ${st.title}</div>
+  <div class="v-grid" id="vg"></div>
+  <button class="btn-cont" style="margin-top:16px" onclick="next()">Weiter →</button>`;
+  const vg=document.getElementById('vg');
+  st.items.forEach(item=>{
+    const d=document.createElement('div');d.className='v-item';
+    d.innerHTML=`<div class="va">${item.a}</div><div class="vw">${item.w}</div><div class="vh">${item.h}</div>`;
+    d.onclick=()=>d.classList.toggle('flip');
+    vg.appendChild(d);
+  });
+}
+
+function rMC(sc,st){
+  sc.innerHTML=`<div class="ex-card">
+    <div class="ex-type">🎯 Wähle die richtige Antwort</div>
+    <div class="ex-q">${st.q}</div>
+    <div class="mc-opts" id="mco"></div>
+    <div class="fb" id="fb"></div>
+  </div>`;
+  const mco=document.getElementById('mco');
+  st.opts.forEach((o,i)=>{
+    const b=document.createElement('button');b.className='mc-btn';b.textContent=o;
+    b.onclick=()=>checkMC(i,st,b);mco.appendChild(b);
+  });
+}
+function checkMC(idx,st,btn){
+  document.querySelectorAll('.mc-btn').forEach(b=>b.disabled=true);
+  const ok=idx===st.cor;
+  btn.classList.add(ok?'ok':'no');
+  if(!ok){document.querySelectorAll('.mc-btn')[st.cor].classList.add('ok');loseHeart();}
+  const fb=document.getElementById('fb');
+  fb.className='fb show '+(ok?'ok':'no');
+  fb.innerHTML=`<span class="fb-icon">${ok?'✅':'❌'}</span><span>${ok?st.okFB:st.noFB}</span>`;
+  if(ok)addXP(25);
+  const c=document.createElement('button');c.className='btn-cont';c.style.marginTop='13px';
+  c.textContent='Weiter →';c.onclick=next;fb.after(c);
+}
+
+function rFill(sc,st){
+  sc.innerHTML=`<div class="ex-card">
+    <div class="ex-type">✍️ Ergänze die Lücke</div>
+    <div class="ex-q">${st.q}</div>
+    <div class="fill-row">
+      <input class="fill-in" id="fi" placeholder="Antwort..." autocomplete="off"/>
+      <button class="btn-check" onclick="checkFill()">Prüfen</button>
+    </div>
+    <div class="gram-tip" style="margin-top:9px">💡 Tipp: ${st.hint}</div>
+    <div class="fb" id="fb"></div>
+  </div>`;
+  document.getElementById('fi').addEventListener('keydown',e=>{if(e.key==='Enter')checkFill()});
+  window._fs=st;
+}
+function checkFill(){
+  const st=window._fs,inp=document.getElementById('fi');
+  const val=inp.value.trim().toLowerCase();
+  const ok=val===st.ans.toLowerCase();
+  inp.classList.add(ok?'ok':'no');inp.disabled=true;
+  document.querySelector('.btn-check').disabled=true;
+  const fb=document.getElementById('fb');
+  fb.className='fb show '+(ok?'ok':'no');
+  fb.innerHTML=`<span class="fb-icon">${ok?'✅':'❌'}</span><span>${ok?st.okFB:st.noFB}</span>`;
+  if(ok)addXP(25); else{
+    loseHeart();
+    const a=document.createElement('div');
+    a.style.cssText='margin-top:7px;font-size:.83rem;color:var(--muted);font-weight:700';
+    a.innerHTML=`Richtige Antwort: <span style="color:var(--teal2)">${st.ans}</span>`;
+    fb.appendChild(a);
+  }
+  const c=document.createElement('button');c.className='btn-cont';c.style.marginTop='12px';
+  c.textContent='Weiter →';c.onclick=next;fb.after(c);
+}
+
+function rChoice(sc,st){
+  sc.innerHTML=`<div class="narr">${st.pr}</div>
+  <div class="ch-opts" id="cho"></div>
+  <div class="fb" id="fb"></div>`;
+  const cho=document.getElementById('cho');
+  st.chs.forEach(ch=>{
+    const b=document.createElement('button');b.className='ch-btn';b.textContent=ch.t;
+    b.onclick=()=>{
+      cho.querySelectorAll('.ch-btn').forEach(x=>x.disabled=true);
+      const fb=document.getElementById('fb');
+      fb.className='fb show '+(ch.ok?'ok':'no');
+      fb.innerHTML=`<span class="fb-icon">${ch.ok?'✅':'❌'}</span><span>${ch.fb}</span>`;
+      if(ch.ok){addXP(20);setTimeout(next,1700);}
+      else{loseHeart();setTimeout(()=>{fb.className='fb';cho.querySelectorAll('.ch-btn').forEach(x=>x.disabled=false);},2000);}
+    };
+    cho.appendChild(b);
+  });
+}
+
+// ════════════════════════════════════════════════════════════
+// XP / HEARTS / COMPLETE
+// ════════════════════════════════════════════════════════════
+function addXP(n){S.xp+=n;S.chXP+=n;document.getElementById('g-xp').textContent=S.xp;popXP(n)}
+function popXP(n){
+  const el=document.createElement('div');el.className='xp-pop';el.textContent='+'+n+' XP';
+  el.style.cssText=`top:${55+Math.random()*40}px;right:${18+Math.random()*50}px`;
+  document.body.appendChild(el);setTimeout(()=>el.remove(),1400);
+}
+function loseHeart(){S.hearts=Math.max(0,S.hearts-1);renderHearts()}
+
+function completeCh(){
+  const c=CH[S.chIdx];
+  if(!S.done.includes(c.id)){S.done.push(c.id);S.xp+=c.xp;S.chXP+=c.xp;}
+  save();
+  const subs=['Ausgezeichnet!','Fantastisch!','Super gemacht!','Sehr gut!','Wunderbar!','Toll!'];
+  document.getElementById('done-sub').textContent=subs[Math.floor(Math.random()*subs.length)]+` Kapitel ${c.id} geschafft!`;
+  document.getElementById('done-stars').textContent=S.hearts===3?'⭐⭐⭐':S.hearts===2?'⭐⭐':'⭐';
+  document.getElementById('done-xp').textContent='+'+S.chXP;
+  const ni=S.chIdx+1;const nb=document.getElementById('btn-nxt');
+  if(ni<CH.length){nb.style.display='block';nb.textContent=`Kapitel ${CH[ni].id}: ${CH[ni].title} →`;}
+  else nb.style.display='none';
+  show('done');konfetti();
+}
+function nextChapter(){const ni=S.chIdx+1;if(ni<CH.length)startCh(ni);}
+
+function konfetti(){
+  const wrap=document.getElementById('kf');wrap.innerHTML='';
+  const cols=['#f5a623','#0d7377','#27ae60','#e84393','#3498db','#fff','#e74c3c'];
+  for(let i=0;i<65;i++){
+    const p=document.createElement('div');p.className='kf';
+    p.style.cssText=`left:${Math.random()*100}%;background:${cols[Math.floor(Math.random()*cols.length)]};animation-delay:${Math.random()*1.5}s;animation-duration:${1.6+Math.random()*1.4}s`;
+    wrap.appendChild(p);
+  }
+}
+
+// ════════════════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════════════════
+document.getElementById('pname').addEventListener('keydown',e=>{if(e.key==='Enter')startGame()});
+window.onload=()=>{
+  const n=localStorage.getItem('da2_name');
+  if(n) document.getElementById('pname').value=n;
+};
+</script>
+</body>
+</html>
